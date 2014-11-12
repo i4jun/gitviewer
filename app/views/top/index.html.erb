@@ -1,0 +1,17 @@
+<div class="container">
+
+  <h1>GitHub【<%= MY_APP['github']['org'] %>】 ISSUE VIEWER</h1>
+
+  <div class="row">
+    <div class="col-sm-10">
+    <% @repo_list.each do |repo| %>
+      <h2><a href="<%= repo["html_url"] %>" target="_blank"><%= repo["name"] %></a></h2>
+      <p><%= repo["description"] %></p>
+      <p class="updated">Updated : <%= Time.parse(repo["pushed_at"]).getlocal.strftime("%Y/%m/%d %H:%M:%S") %></p>
+      <div class="issues_area" data-repo="<%= repo["name"] %>"></div>
+    <% end %>
+  </div>
+
+  </div><!-- /.row -->
+
+</div><!-- /.container -->

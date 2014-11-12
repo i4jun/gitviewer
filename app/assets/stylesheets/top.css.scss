@@ -1,0 +1,28 @@
+// Place all the styles related to the top controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+h2 {
+  padding-left:10px;
+  border-left:6px solid #5bc0de;
+  border-bottom:1px solid #5bc0de;
+}
+
+.issue-label {
+  font-weight: bold;
+  padding: 2px 4px;
+  margin-left: 2px;
+  font-size: 90%;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.updated {
+  color: #888;
+}
+
+.issue-title a {
+  color: #000;
+  font-weight: bold;
+  font-family: Meiryo,"MS PGothic",arial,sans-serif;
+}
