@@ -11,7 +11,11 @@ $(".issues_area").each ->
     error: (jqXHR, textStatus, errorThrown) ->
       alert(textStatus)
     success: (data, textStatus, jqXHR) ->
-      return if !data
+      if !data || Object.keys(data).length == 0
+        target_area.html('')
+        $('#side_repo_name_' + repo_name).show();
+        return
+
       inshtml = '<table class="table table-bordered">'
       for i,value of data
         inshtml += "<tr>"
@@ -29,6 +33,8 @@ $(".issues_area").each ->
         inshtml += '</td>'
         inshtml += '</tr>'
       inshtml += '</table>'
-      target_area.append(inshtml)
+      target_area.html(inshtml)
+      $('#side_repo_name_' + repo_name + ' a').append('(' + Object.keys(data).length + ')')
+      $('#side_repo_name_' + repo_name).show();
 
 urlAutoLink = (str) -> str.replace(/\r?\n/g, '<br>').replace(/(https?:\/\/[\w\-\.!~\*\';\/\?:&@=\+\$,%#\[\]]+)/gi, "<a href='$1' target='_blank'>$1</a>")

@@ -3,15 +3,26 @@
   <h1>GitHub【<%= MY_APP['github']['org'] %>】 ISSUE VIEWER</h1>
 
   <div class="row">
-    <div class="col-sm-10">
+    <div class="col-sm-8">
     <% @repo_list.each do |repo| %>
-      <h2><a href="<%= repo["html_url"] %>" target="_blank"><%= repo["name"] %></a></h2>
+      <h2 id="repo_area_<%= repo["name"] %>"><a href="<%= repo["html_url"] %>" target="_blank"><%= repo["name"] %></a></h2>
       <p><%= repo["description"] %></p>
       <p class="updated">Updated : <%= Time.parse(repo["pushed_at"]).getlocal.strftime("%Y/%m/%d %H:%M:%S") %></p>
-      <div class="issues_area" data-repo="<%= repo["name"] %>"></div>
+      <div class="issues_area" data-repo="<%= repo["name"] %>">
+        <img class="loading_area img-responsive center-block" src=<%= asset_path "ajax-loader.gif" %> />
+      </div>
     <% end %>
-  </div>
+    </div>
 
+    <div class="col-sm-3 col-sm-offset-1">
+      <div class="sidebar-module">
+        <h4>Repository List</h4>
+        <ol class="list-unstyled">
+        <% @repo_list.each do |repo| %>
+          <li id="side_repo_name_<%= repo["name"] %>" style="display: none;"><a href="#repo_area_<%= repo["name"] %>"><%= repo["name"] %></a></li>
+        <% end %>
+        </ol>
+      </div>
+    </div><!-- /.blog-sidebar -->
   </div><!-- /.row -->
-
 </div><!-- /.container -->
