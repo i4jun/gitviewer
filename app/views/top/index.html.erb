@@ -19,7 +19,7 @@
         <h4>Repository List</h4>
         <ol class="list-unstyled">
         <% @repo_list.each do |repo| %>
-          <li id="side_repo_name_<%= repo["name"] %>" style="display: none;"><a href="#repo_area_<%= repo["name"] %>"><%= repo["name"] %></a></li>
+          <li id="side_repo_name_<%= repo["name"] %>"><a href="#repo_area_<%= repo["name"] %>"><%= repo["name"] %></a></li>
         <% end %>
         </ol>
       </div>
