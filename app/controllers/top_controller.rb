@@ -6,6 +6,9 @@ class TopController < ApplicationController
     @repo_list.sort! do |a, b|
       b["pushed_at"] <=> a["pushed_at"]
     end
+
+    member_url = "https://api.github.com/orgs/#{MY_APP['github']['org']}/members";
+    @member_list = github_api(member_url)
   end
 
   def get_issues

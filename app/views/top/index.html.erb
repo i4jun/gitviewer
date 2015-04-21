@@ -2,14 +2,30 @@
 
   <h1>GitHub【<%= MY_APP['github']['org'] %>】 ISSUE VIEWER</h1>
 
+  <%
+    cookie_hash = JSON.parse(cookies[:non_disp_repos]) if cookies[:non_disp_repos].present?
+    cookie_mention = cookies[:mentioned] if cookies[:mentioned].present?
+  %>
+
   <div class="row">
     <div class="col-sm-8">
+    <% if @member_list.present? %>
+      <select class="form-control" id="mentioned">
+        <option value="">@メンションで絞り込む</option>
+        <% @member_list.each do |member| %>
+          <option value="<%= member['login'] %>" <% if cookie_mention.present? && cookie_mention == member['login'] %> selected<% end %>><%= member['login'] %></option>
+        <% end %>
+      </select>
+    <% end %>
+
     <% @repo_list.each do |repo| %>
-      <h2 id="repo_area_<%= repo["name"] %>"><a href="<%= repo["html_url"] %>" target="_blank"><%= repo["name"] %></a></h2>
-      <p><%= repo["description"] %></p>
-      <p class="updated">Updated : <%= Time.parse(repo["pushed_at"]).getlocal.strftime("%Y/%m/%d %H:%M:%S") %></p>
-      <div class="issues_area" data-repo="<%= repo["name"] %>">
-        <img class="loading_area img-responsive center-block" src=<%= asset_path "ajax-loader.gif" %> />
+      <div id="main_area_<%= repo["name"] %>" <% if cookie_hash.present? && cookie_hash.include?(repo["name"]) %> style="display:none"<% end %>>
+        <h2 id="repo_area_<%= repo["name"] %>"><a href="<%= repo["html_url"] %>" target="_blank"><%= repo["name"] %></a></h2>
+        <p><%= repo["description"] %></p>
+        <p class="updated">Updated : <%= Time.parse(repo["pushed_at"]).getlocal.strftime("%Y/%m/%d %H:%M:%S") %></p>
+        <div id="issues_area_<%= repo["name"] %>">
+          <img class="loading_area img-responsive center-block" src=<%= asset_path "ajax-loader.gif" %> />
+        </div>
       </div>
     <% end %>
     </div>
@@ -19,9 +35,19 @@
         <h4>Repository List</h4>
         <ol class="list-unstyled">
         <% @repo_list.each do |repo| %>
-          <li id="side_repo_name_<%= repo["name"] %>"><a href="#repo_area_<%= repo["name"] %>"><%= repo["name"] %></a></li>
+          <li>
+            <ul style="padding-left: 0;">
+            <li style="display:inline">
+              <input type="checkbox" class="disp_repo_check" data-repo="<%= repo["name"] %>"<% if cookie_hash.blank? || !cookie_hash.include?(repo["name"]) %> checked="checked"<% end %>>
+            </li>
+            <li style="display:inline" id="side_repo_name_<%= repo["name"] %>"><a href="#repo_area_<%= repo["name"] %>"><%= repo["name"] %></a></li>
+            </ul>
+          </li>
         <% end %>
         </ol>
+
+        <span class="glyphicon glyphicon-ok"></span><a href="javascript:void(0);" id="all_repo_check"><strong>all check</strong></a>
+        <p class="small">絞込条件はクッキーに保存されます</p>
       </div>
     </div><!-- /.blog-sidebar -->
   </div><!-- /.row -->
