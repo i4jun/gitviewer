@@ -1,14 +1,26 @@
 class TopController < ApplicationController
 
   def index
-    repos_url = "https://api.github.com/orgs/#{MY_APP['github']['org']}/repos";
-    @repo_list = github_api(repos_url)
-    @repo_list.sort! do |a, b|
-      b["pushed_at"] <=> a["pushed_at"]
+    repo_key = 'repo_list'
+    @repo_list = Rails.cache.read(repo_key)
+    if @repo_list.blank?
+      repos_url = "https://api.github.com/orgs/#{MY_APP['github']['org']}/repos";
+      @repo_list = github_api(repos_url)
+      @repo_list.sort! do |a, b|
+        b["pushed_at"] <=> a["pushed_at"]
+      end
+
+      Rails.cache.write(repo_key, @repo_list, expires_in: 1.day)
     end
 
-    member_url = "https://api.github.com/orgs/#{MY_APP['github']['org']}/members";
-    @member_list = github_api(member_url)
+    member_key = 'member_list'
+    @member_list = Rails.cache.read(member_key)
+    if @member_list.blank?
+      member_url = "https://api.github.com/orgs/#{MY_APP['github']['org']}/members";
+      @member_list = github_api(member_url)
+
+      Rails.cache.write(member_key, @member_list, expires_in: 1.day)
+    end
   end
 
   def get_issues
