@@ -1,21 +1,32 @@
 <div class="container">
 
-  <h1>GitHub【<%= MY_APP['github']['org'] %>】 ISSUE VIEWER</h1>
+  <h1 class="page-header">GitHub【<%= MY_APP['github']['org'] %>】 ISSUE VIEWER</h1>
 
   <%
     cookie_hash = JSON.parse(cookies[:non_disp_repos]) if cookies[:non_disp_repos].present?
     cookie_mention = cookies[:mentioned] if cookies[:mentioned].present?
+    cookie_creator = cookies[:creator] if cookies[:creator].present?
   %>
 
   <div class="row">
     <div class="col-sm-8">
+
     <% if @member_list.present? %>
-      <select class="form-control" id="mentioned">
-        <option value="">@メンションで絞り込む</option>
-        <% @member_list.each do |member| %>
-          <option value="<%= member['login'] %>" <% if cookie_mention.present? && cookie_mention == member['login'] %> selected<% end %>><%= member['login'] %></option>
-        <% end %>
-      </select>
+      <form class="form-inline">
+        <select class="form-control" id="creator">
+          <option value="">作成者で絞り込む</option>
+          <% @member_list.each do |member| %>
+            <option value="<%= member['login'] %>" <% if cookie_creator.present? && cookie_creator == member['login'] %> selected<% end %>><%= member['login'] %></option>
+          <% end %>
+        </select>
+
+        <select class="form-control" id="mentioned">
+          <option value="">@メンションで絞り込む</option>
+          <% @member_list.each do |member| %>
+            <option value="<%= member['login'] %>" <% if cookie_mention.present? && cookie_mention == member['login'] %> selected<% end %>><%= member['login'] %></option>
+          <% end %>
+        </select>
+      </form>
     <% end %>
 
     <% @repo_list.each do |repo| %>

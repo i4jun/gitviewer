@@ -26,10 +26,12 @@ class TopController < ApplicationController
   def get_issues
     repo_name = params[:repo_name]
     mentioned = params[:mentioned]
+    creator = params[:creator]
 
     issues_url = "https://api.github.com/repos/#{MY_APP['github']['org']}/#{repo_name}/issues"
     issues_url << "?since=#{(DateTime.now << 1).iso8601}"
     issues_url << "&mentioned=#{mentioned}" if mentioned.present?
+    issues_url << "&creator=#{creator}" if creator.present?
     issues_list = github_api(issues_url)
     issues_list.each_with_index do |issue, i|
       issues_list[i]["created_at_format"] = Time.parse(issue["created_at"]).getlocal.strftime("%Y/%m/%d %H:%M:%S")

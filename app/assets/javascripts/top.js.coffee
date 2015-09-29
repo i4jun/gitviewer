@@ -18,6 +18,9 @@ getIssue = (repo_name, target_area) ->
   if $('#mentioned').length > 0
     dataHash.mentioned = $('#mentioned').val()
 
+  if $('#creator').length > 0
+    dataHash.creator = $('#creator').val()
+
   $.ajax "/get_issues/#{repo_name}",
     async: true
     type: 'GET'
@@ -82,3 +85,12 @@ $('#mentioned').on "change", ->
            {'expires': 365, 'path': '/'}
           )
 
+$('#creator').on "change", ->
+  $('.disp_repo_check[type="checkbox"]:checked').each ->
+    repo_name = $(this).data("repo")
+    target_area = $('#issues_area_' + repo_name)
+    getIssue(repo_name, target_area)
+  $.cookie('creator',
+            $(this).val(),
+           {'expires': 365, 'path': '/'}
+          )
