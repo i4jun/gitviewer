@@ -1,5 +1,5 @@
-# config/github.yml
-
+# Put github auth file:
+  config/github.yml
 <pre>
 COMMON: &COMMON
   github:
